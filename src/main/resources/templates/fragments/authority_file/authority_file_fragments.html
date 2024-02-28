@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/header :: head_declaration"></head>
+<body>
+
+<div th:remove="tag" th:fragment="generated-file-fields">
+    <div th:id="generated-file-fields">
+        <input th:type="hidden" th:id="generated-file-name" th:value="${fileName}">
+        <input th:type="hidden" th:id="generated-file-content" th:value="${fileContent}">
+        <input th:type="hidden" th:id="generated-file-isPartial" th:value="${isPartial}">
+        <input th:type="hidden" th:id="generated-file-partialDateFrom" th:value="${partialDateFrom}">
+        <input th:type="hidden" th:id="generated-file-partialDateTo" th:value="${partialDateTo}">
+    </div>
+</div>
+
+</body>
+</html>

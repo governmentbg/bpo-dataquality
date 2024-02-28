@@ -1,0 +1,90 @@
+server:
+  port: 8098
+  servlet:
+    context-path: /patents-exporter
+    session:
+      timeout: 7200s
+    encoding:
+      enabled: true
+      force: true
+      charset: UTF-8
+
+
+tomcat:
+  ajp:
+    enabled: false
+    port: 9098
+
+spring:
+  application:
+    name: patents-exporter
+  profiles:
+    active: '@activeProfile@'
+  web:
+    locale: bg
+  messages:
+    encoding: UTF-8
+    basename: messages
+  main:
+    allow-bean-definition-overriding: true
+  http:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+  jmx:
+    enabled: false
+
+theme:
+  name: first-theme
+
+pdb:
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    connectionProperties: characterEncoding=utf-8
+
+portal:
+  messages:
+    url: ${portal.url}web/guest/messages
+  logout:
+    url: ${portal.url-with-port}cas/logout?service=${portal.url-with-port}c/portal/logout
+  management:
+    home:
+      url: ${portal.url}web/management
+  home:
+    url: ${portal.url}web/guest/home
+  user:
+    url: ${portal.url}web/guest/home?p_p_id=2&p_p_lifecycle=0&p_p_state=maximized&p_p_mode=view
+
+feedback:
+  url: ${portal.url}suggestions
+
+tmdn:
+  url: https://www.tmdn.org/
+
+cas:
+  logout:
+    url: ${portal.url}cas/logout
+  server: ${portal.url}cas
+  application:
+    logout:
+      page: ${portal.url}c/portal/logout
+
+liferay:
+  virtual:
+    host: portal.bpo.bg
+  service:
+    url: ${portal.url}api/jsonws
+
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 600000
+        readTimeout: 600000
+
+#spring.web.resources.static-locations=/resources/
+#spring.thymeleaf.prefix=/WEB-INF/view/
+#spring.thymeleaf.suffix=.html

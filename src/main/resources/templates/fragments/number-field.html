@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<div th:fragment="number-field(numberList)">
+    <select th:id="filter-number" class="ui-inputfield w220px h35px search-filter">
+        <option th:each="number : ${numberList}"
+                th:text="${number}"
+                th:value="${number}">
+        </option>
+    </select>
+</div>
+</body>
+</html>

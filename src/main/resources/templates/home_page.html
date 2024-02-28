@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/header :: head_declaration"></head>
+<body>
+<header th:replace="fragments/header :: header"></header>
+<div class="main-bpo-content" style="min-height: 400px">
+    <div class="portlet-content" style="padding-top: 0">
+        <header class="bpo">
+            <h2 th:text="#{home.title}"></h2>
+        </header>
+    </div>
+
+    <a th:href="@{/patents-publication}">
+        <div>
+            <button th:text="#{patents.title}" type="button"
+                    style="width:100%; letter-spacing: 1px; text-transform: uppercase;font-size: 14px; font-weight: normal; line-height: 20px;"></button>
+        </div>
+    </a>
+    <a th:href="@{/authority-files}">
+        <div>
+            <button th:text="#{authority.file.page.title}" type="button"
+                    style="width:100%; letter-spacing: 1px; text-transform: uppercase;font-size: 14px; font-weight: normal; line-height: 20px;"></button>
+        </div>
+    </a>
+
+    <div>
+    </div>
+</div>
+<footer th:replace="fragments/footer :: footer"></footer>
+</body>
+</html>

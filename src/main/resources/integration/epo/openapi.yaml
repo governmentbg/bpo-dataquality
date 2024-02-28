@@ -1,0 +1,1873 @@
+openapi: 3.0.1
+info:
+  title: Woxy NPO Quality API
+  description: API of the Woxy
+  termsOfService: https://www.epo.org
+  contact:
+    name: European Patent Office
+    url: https://www.epo.org
+    email: info@epo.org
+  license:
+    name: Commercial
+  version: 1.0.0
+servers:
+- url: https://iodq.apps-staging.epo.org/dataquality/data-quality-service-intg
+  description: Generated server url
+paths:
+  /api/user/authenticated/settings:
+    get:
+      tags:
+      - UserSettings
+      summary: Get user's settings/preferences
+      operationId: get
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserSettings'
+              example:
+                validationReportNotificationEnabled: true
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        "405":
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+    post:
+      tags:
+      - UserSettings
+      summary: Update user's settings/preferences
+      operationId: update
+      parameters:
+      - name: validationReportNotificationEnabled
+        in: query
+        description: Boolean that answers if the user wants to receive e-mail notifications
+          when ValidationReports are generated
+        required: true
+        schema:
+          type: boolean
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserSettings'
+              example:
+                validationReportNotificationEnabled: true
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        "405":
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /api/user-guide/upload:
+    post:
+      tags:
+      - UserGuide
+      summary: Upload new user-guide file
+      operationId: upload
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              required:
+              - file
+              type: object
+              properties:
+                file:
+                  type: string
+                  description: File to be uploaded
+                  format: binary
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserGuideFile'
+              example:
+                filename: userGuide-v2.pdf
+                modifiedAt: 04/11/2021 15:07:07
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        "401":
+          description: Unauthorized
+        "405":
+          description: Method Not Allowed
+        "415":
+          description: Unsupported Media Type
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /api/structure-validation/file/{countryCode}/{dataType}:
+    get:
+      tags:
+      - NpoStructureValidationFile
+      summary: Get details of file being used for XML structure's validation
+      operationId: get_1
+      parameters:
+      - name: countryCode
+        in: path
+        description: ISO 3166 2-letter country code
+        required: true
+        schema:
+          type: string
+      - name: dataType
+        in: path
+        description: PublicationFile's DataType for which the file is being used for
+          validation
+        required: true
+        schema:
+          type: string
+          enum:
+          - ABSTRACT
+          - AUTHORITY_FILE
+          - BIBLIOGRAPHIC
+          - CITATION
+          - COMBINED_DATA_PACKAGE
+          - CPC
+          - FULL_TEXT
+          - IMAGE
+          - LEGAL_STATUS
+          - UNKNOWN
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/StructureValidationFile'
+              example:
+                filename: testDTD.dtd
+                modifiedAt: 04/11/2021 15:07:07
+                countryCode: HR
+                dataType: ABSTRACT
+        "400":
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        "401":
+          description: Unauthorized
+        "405":
+          description: Method Not Allowed
+        "500":
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiError'
+    post:
+      tags:
+      - NpoStructureValidationFile
+      summary: Upload file to be used for validation of the structure of XML PublicationFiles
+        per country and data type
+      operationId: upload_1
+      parameters:
+      - name: countryCode
+        in: path
+        description: ISO 3166 2-letter country code
+        required: true
+        schema:
+          type: string
+      - name: dataType
+        in: path
+        description: PublicationFile's DataType that the file is being used for validation
+        required: true
+        schema:
+          type: string
+          enum:
+          - ABSTRACT
+          - AUTHORITY_FILE
+          - BIBLIOGRAPHIC
+          - CITATION
+          - COMBINED_DATA_PACKAGE
+          - CPC
+          - FULL_TEXT
+          - IMAGE
+          - LEGAL_STATUS
+          - UNKNOWN
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              required:
+              - file
+              type: object
+              properties:
+                file:
+                  type: string
+                  description: File to be uploaded
+                  format: binary
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/StructureValidationFile'
+              example:
+                filename: testDTD.dtd
+                modifiedAt: 04/11/2021 15:07:07
+                countryCode: HR
+                dataType: ABSTRACT
+        "400":
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        "401":
+          description: Unauthorized
+        "405":
+          description: Method Not Allowed
+        "415":
+          description: Unsupported Media Type
+        "500":
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /api/publicationFile/single:
+    post:
+      tags:
+      - NpoPublicationFile
+      summary: Upload publication file
+      operationId: uploadPublicationFile
+      parameters:
+      - name: deliveryId
+        in: query
+        description: UUID to be used to group any of the files under the same delivery
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: partNumber
+        in: query
+        description: Number of part for this delivery
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 1
+      - name: deliverySize
+        in: query
+        description: Number of files to be expected for this delivery
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 1
+      - name: dataType
+        in: query
+        description: "File's data type. Acceptable values: ABSTRACT,AUTHORITY_FILE,BIBLIOGRAPHIC,CITATION,CPC,FULL_TEXT,IMAGE,LEGAL_STATUS"
+        required: true
+        schema:
+          type: string
+          enum:
+          - ABSTRACT
+          - AUTHORITY_FILE
+          - BIBLIOGRAPHIC
+          - CITATION
+          - COMBINED_DATA_PACKAGE
+          - CPC
+          - FULL_TEXT
+          - IMAGE
+          - LEGAL_STATUS
+          - UNKNOWN
+      - name: countryCode
+        in: query
+        description: ISO 3166 2-letter country code
+        required: false
+        schema:
+          type: string
+      - name: kindCode
+        in: query
+        description: Kind Code of PublicationFile (only for DataType "IMAGE")
+        required: false
+        schema:
+          type: string
+      - name: publicationDate
+        in: query
+        description: Publication Date of PublicationFile in format YYYY-MM-DD or YYYYMMDD
+          (only for DataType "IMAGE")
+        required: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              required:
+              - file
+              type: object
+              properties:
+                file:
+                  type: string
+                  description: File to be uploaded
+                  format: binary
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PublicationFile'
+              example:
+                id: 6030
+                originalFilename: fullText.xml
+                deliveryId: 3b84922f-9f72-4af2-bcd0-ad669a749e57
+                dataType: FULL_TEXT
+                submissionDate: 2021-11-17
+                status: WARNING
+                validationReportAvailable: false
+                validationError:
+                  errorMessages:
+                    xml:
+                    - Image "testtiff.tiff" is missing and is required by the XML
+                      file
+                    - Image "testpng.png" is missing and is required by the XML file
+                    - Image "testjpeg.jpeg" is missing and is required by the XML
+                      file
+        "400":
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        "401":
+          description: Unauthorized
+        "405":
+          description: Method Not Allowed
+        "415":
+          description: Unsupported Media Type
+        "500":
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /api/publicationFile/package:
+    post:
+      tags:
+      - NpoPublicationFile
+      summary: Upload ZIP package with publication files
+      operationId: uploadPublicationFilePackage
+      parameters:
+      - name: deliveryId
+        in: query
+        description: UUID to be used to group any of the files under the same delivery
+        required: false
+        schema:
+          type: string
+          format: uuid
+      - name: dataType
+        in: query
+        description: "File's data type. Acceptable values: COMBINED_DATA_PACKAGE"
+        required: false
+        schema:
+          type: string
+          default: COMBINED_DATA_PACKAGE
+          enum:
+          - ABSTRACT
+          - AUTHORITY_FILE
+          - BIBLIOGRAPHIC
+          - CITATION
+          - COMBINED_DATA_PACKAGE
+          - CPC
+          - FULL_TEXT
+          - IMAGE
+          - LEGAL_STATUS
+          - UNKNOWN
+      - name: countryCode
+        in: query
+        description: ISO 3166 2-letter country code
+        required: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              required:
+              - file
+              type: object
+              properties:
+                file:
+                  type: string
+                  description: ZIP file to be uploaded
+                  format: binary
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PublicationFile'
+              example:
+              - id: 6030
+                originalFilename: fullText.xml
+                deliveryId: 3b84922f-9f72-4af2-bcd0-ad669a749e57
+                dataType: FULL_TEXT
+                submissionDate: 2021-11-17
+                status: WARNING
+                validationReportAvailable: false
+                validationError:
+                  errorMessages:
+                    xml:
+                    - Image "testtiff.tiff" is missing and is required by the XML
+                      file
+                    - Image "testpng.png" is missing and is required by the XML file
+                    - Image "testjpeg.jpeg" is missing and is required by the XML
+                      file
+        "400":
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        "401":
+          description: Unauthorized
+        "405":
+          description: Method Not Allowed
+        "415":
+          description: Unsupported Media Type
+        "500":
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /api/office-logo/{countryCode}:
+    get:
+      tags:
+      - NpoOfficeLogo
+      summary: Download logo of office with provided country code
+      operationId: download_3
+      parameters:
+      - name: countryCode
+        in: path
+        description: ISO 3166 2-letter country code
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+                format: binary
+        "400":
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        "401":
+          description: Unauthorized
+        "405":
+          description: Method Not Allowed
+        "500":
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiError'
+    post:
+      tags:
+      - NpoOfficeLogo
+      summary: Upload file to be used for validation of the structure of XML PublicationFiles
+        per country and data type
+      operationId: upload_2
+      parameters:
+      - name: countryCode
+        in: path
+        description: ISO 3166 2-letter country code
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              required:
+              - file
+              type: object
+              properties:
+                file:
+                  type: string
+                  description: File to be uploaded
+                  format: binary
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+              example: grOfficeLogo.png
+        "400":
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        "401":
+          description: Unauthorized
+        "405":
+          description: Method Not Allowed
+        "415":
+          description: Unsupported Media Type
+        "500":
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /api/delivery/revalidate:
+    post:
+      tags:
+      - NpoDelivery
+      summary: (Re-)validates PublicationFiles in a specific Delivery
+      operationId: revalidate
+      parameters:
+      - name: deliveryId
+        in: query
+        description: Delivery ID
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        "200":
+          description: ΟΚ
+          content:
+            '*/*':
+              schema:
+                type: string
+        "400":
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        "401":
+          description: Unauthorized
+        "405":
+          description: Method Not Allowed
+        "500":
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /api/country/remove:
+    post:
+      tags:
+      - NpoCountry
+      summary: Remove country code from available country codes and get the updated
+        list
+      operationId: remove
+      parameters:
+      - name: countryCode
+        in: query
+        description: ISO 3166 2-letter country code to be added
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Country'
+              example:
+              - code: HR
+                name: Croatia
+              - code: LV
+                name: Latvia
+        "400":
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        "401":
+          description: Unauthorized
+        "405":
+          description: Method Not Allowed
+        "500":
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /api/country/add:
+    post:
+      tags:
+      - NpoCountry
+      summary: Add country code to available country codes and get the updated list
+      operationId: add
+      parameters:
+      - name: countryCode
+        in: query
+        description: ISO 3166 2-letter country code to be added
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Country'
+              example:
+              - code: HR
+                name: Croatia
+              - code: LV
+                name: Latvia
+        "400":
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        "401":
+          description: Unauthorized
+        "405":
+          description: Method Not Allowed
+        "500":
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /api/config:
+    get:
+      tags:
+      - AppConfig
+      summary: Get all AppConfigs
+      operationId: get_5
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AppConfig'
+              example:
+              - name: APP_CONFIG_NAME_A
+                value: Value of config A
+              - name: APP_CONFIG_NAME_B
+                value: Value of config B
+              - name: APP_CONFIG_NAME_C
+                value: Value of config C
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        "405":
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+    post:
+      tags:
+      - AppConfig
+      summary: Update user's settings/preferences
+      operationId: update_1
+      parameters:
+      - name: configName
+        in: query
+        description: Name of the AppConfig
+        required: true
+        schema:
+          type: string
+          enum:
+          - MAIL_VALIDATION_REPORT_WITH_ATTACHMENT_SUBJECT
+          - MAIL_VALIDATION_REPORT_WITH_ATTACHMENT_BODY
+          - MAIL_VALIDATION_REPORT_WITHOUT_ATTACHMENT_SUBJECT
+          - MAIL_VALIDATION_REPORT_WITHOUT_ATTACHMENT_BODY
+          - USER_COUNTRY_CODES_AVAILABLE
+          - USER_GUIDE_TEXT
+      - name: configValue
+        in: query
+        description: Value of the AppConfig
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppConfig'
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        "405":
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /api/user/authenticated:
+    get:
+      tags:
+      - NpoUser
+      summary: Get authenticated user's details
+      operationId: getAuthenticatedUser
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+              example:
+                username: jsmith.external@epo.org
+                name: John Smith
+                countryCode: GR
+                roles:
+                - iodq-users
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        "405":
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /api/user/authenticated/user:
+    get:
+      tags:
+      - NpoUser
+      summary: Get authenticated user's details
+      operationId: getUser
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+              example:
+                username: jsmith.external@epo.org
+                name: John Smith
+                countryCode: GR
+                roles:
+                - iodq-users
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        "405":
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /api/user/authenticated/test:
+    get:
+      tags:
+      - NpoUser
+      summary: Get authenticated test user's details
+      operationId: getUserTest
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+              example:
+                username: jsmith.external@epo.org
+                name: John Smith
+                countryCode: GR
+                roles:
+                - iodq-test
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        "405":
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /api/user/authenticated/admin:
+    get:
+      tags:
+      - NpoUser
+      summary: Get authenticated administrator user's details
+      operationId: getAdmin
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+              example:
+                username: jsmith.external@epo.org
+                name: John Smith
+                countryCode: GR
+                roles:
+                - iodq-admins
+                - iodq-users
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        "405":
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /api/user-guide:
+    get:
+      tags:
+      - UserGuide
+      summary: Get user's guide
+      operationId: getUserGuideFile
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserGuideFile'
+              example:
+                filename: userGuide-v2.pdf
+                modifiedAt: 04/11/2021 15:07:07
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        "405":
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /api/user-guide/text:
+    get:
+      tags:
+      - UserGuide
+      summary: Get user's guide
+      operationId: getUserGuideText
+      responses:
+        "200":
+          description: OK
+          content:
+            text/html:
+              schema:
+                type: string
+        "400":
+          description: Bad Request
+          content:
+            text/html:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        "401":
+          description: Unauthorized
+          content:
+            text/html:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        "405":
+          description: Method Not Allowed
+          content:
+            text/html:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        "500":
+          description: Internal Server Error
+          content:
+            text/html:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /api/user-guide/download:
+    get:
+      tags:
+      - UserGuide
+      summary: Download latest user-guide file
+      operationId: download
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: string
+                format: binary
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        "401":
+          description: Unauthorized
+        "405":
+          description: Method Not Allowed
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /api/structure-validation/file/{countryCode}/{dataType}/download:
+    get:
+      tags:
+      - NpoStructureValidationFile
+      summary: Download file being used for validation of the structure of XML files
+      operationId: download_1
+      parameters:
+      - name: countryCode
+        in: path
+        description: ISO 3166 2-letter country code
+        required: true
+        schema:
+          type: string
+      - name: dataType
+        in: path
+        description: PublicationFile's DataType for which the file is being used for
+          validation
+        required: true
+        schema:
+          type: string
+          enum:
+          - ABSTRACT
+          - AUTHORITY_FILE
+          - BIBLIOGRAPHIC
+          - CITATION
+          - COMBINED_DATA_PACKAGE
+          - CPC
+          - FULL_TEXT
+          - IMAGE
+          - LEGAL_STATUS
+          - UNKNOWN
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+                format: binary
+        "400":
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        "401":
+          description: Unauthorized
+        "405":
+          description: Method Not Allowed
+        "500":
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /api/report/delivery/{deliveryId}:
+    get:
+      tags:
+      - NpoValidationReport
+      summary: Get Validation Report based on delivery ID
+      operationId: getReportOfDelivery
+      parameters:
+      - name: deliveryId
+        in: path
+        description: Delivery ID of the requested ValidationReport
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: format
+        in: query
+        description: Format of ValidationReport file
+        required: false
+        schema:
+          type: string
+          default: CSV
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  type: string
+                  format: binary
+        "400":
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        "401":
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        "405":
+          description: Method Not Allowed
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        "500":
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /api/publicationFile:
+    get:
+      tags:
+      - NpoPublicationFile
+      summary: Get Publication Files based on delivery ID
+      operationId: get_2
+      parameters:
+      - name: deliveryId
+        in: query
+        description: Delivery ID of the requested PublicationFiles
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PublicationFile'
+              example:
+              - id: 6030
+                originalFilename: fullText.xml
+                deliveryId: 3b84922f-9f72-4af2-bcd0-ad669a749e57
+                dataType: FULL_TEXT
+                submissionDate: 2021-11-17
+                status: WARNING
+                validationReportAvailable: false
+                validationError:
+                  errorMessages:
+                    xml:
+                    - Image "testtiff.tiff" is missing and is required by the XML
+                      file
+                    - Image "testpng.png" is missing and is required by the XML file
+                    - Image "testjpeg.jpeg" is missing and is required by the XML
+                      file
+        "400":
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        "401":
+          description: Unauthorized
+        "405":
+          description: Method Not Allowed
+        "500":
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /api/publicationFile/package/download:
+    get:
+      tags:
+      - NpoPublicationFile
+      summary: Download compressed (zip) file with any PublicationFiles in requested
+        folderPath
+      operationId: downloadFolderPath
+      parameters:
+      - name: folderPath
+        in: query
+        description: Path to folder of files to be downloaded
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  type: string
+                  format: binary
+        "400":
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        "401":
+          description: Unauthorized
+        "405":
+          description: Method Not Allowed
+        "500":
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /api/publicationFile/download/{publicationFileId}:
+    get:
+      tags:
+      - NpoPublicationFile
+      summary: Download Publication File based on its ID
+      operationId: download_2
+      parameters:
+      - name: publicationFileId
+        in: path
+        description: ID of the PublicationFile
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  type: string
+                  format: binary
+        "400":
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        "401":
+          description: Unauthorized
+        "405":
+          description: Method Not Allowed
+        "500":
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /api/delivery:
+    get:
+      tags:
+      - NpoDelivery
+      summary: Get Deliveries based on provided parameters
+      operationId: get_3
+      parameters:
+      - name: pageNumber
+        in: query
+        description: Page's number
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 1
+      - name: pageSize
+        in: query
+        description: Page's size
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 10
+      - name: sortField
+        in: query
+        description: The field to be sorted by
+        required: false
+        schema:
+          type: string
+          default: createdAt
+      - name: sortOrder
+        in: query
+        description: Sort order. Defaults to "desc" for descending. Use "asc" to change
+          it.
+        required: false
+        schema:
+          type: string
+          default: desc
+      - name: originalFilename
+        in: query
+        description: String to be used as filter on Publication File's originally
+          uploaded filename
+        required: false
+        schema:
+          type: string
+      - name: submissionDateFrom
+        in: query
+        description: Date (YYYY-MM-DD) to be used as low-limit filter on Publication
+          File's submission date
+        required: false
+        schema:
+          type: string
+          format: date
+      - name: submissionDateTo
+        in: query
+        description: Date (YYYY-MM-DD) to be used as high-limit filter on Publication
+          File's submission date
+        required: false
+        schema:
+          type: string
+          format: date
+      - name: statuses
+        in: query
+        description: String of comma-separated statuses to be used as filter on Publication
+          File's status
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - SUBMITTED
+            - APPROVED
+            - WARNING
+            - REJECTED
+      - name: validationReportAvailable
+        in: query
+        description: Boolean ("true" | "false") to be used as filter on Delivery's
+          availability of ValidationReport
+        required: false
+        schema:
+          type: string
+      - name: fetchPublicationFiles
+        in: query
+        description: Boolean ("true" | "false") to handle Publication Files' fetching
+          along with Delivery (PublicationFile's validationError won't be fetched)
+        required: false
+        schema:
+          type: string
+      - name: countryCode
+        in: query
+        description: ISO 3166 2-letter country code
+        required: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Delivery'
+              example:
+                totalElements: 2
+                content:
+                - id: 5f1fffe3-3438-496e-a4a3-cd590d14eccb
+                  name: Single Delivery
+                  submissionDate: 2021-05-18
+                  countryCode: GR
+                  validationReportAvailable: true
+                  statuses:
+                    PARTIALLY_APPROVED: 1
+                    APPROVED: 1
+                  publicationFiles: null
+                - id: b810684c-6cd2-4e9f-bbe7-15eae80b5bab
+                  name: Single Delivery
+                  submissionDate: 2021-05-18
+                  countryCode: GR
+                  validationReportAvailable: true
+                  statuses:
+                    WARNING: 6
+                  publicationFiles: null
+        "400":
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        "401":
+          description: Unauthorized
+        "404":
+          description: Not Found
+        "405":
+          description: Method Not Allowed
+        "500":
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /api/delivery/download/{deliveryId}:
+    get:
+      tags:
+      - NpoPublicationFile
+      summary: Download compressed (zip) file with any PublicationFiles in requested
+        Delivery
+      operationId: downloadDelivery
+      parameters:
+      - name: deliveryId
+        in: path
+        description: ID of the Delivery
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  type: string
+                  format: binary
+        "400":
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        "401":
+          description: Unauthorized
+        "405":
+          description: Method Not Allowed
+        "500":
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /api/country:
+    get:
+      tags:
+      - NpoCountry
+      summary: Get available country codes in code-ascending order
+      operationId: get_4
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Country'
+              example:
+              - code: HR
+                name: Croatia
+              - code: LV
+                name: Latvia
+        "400":
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        "401":
+          description: Unauthorized
+        "405":
+          description: Method Not Allowed
+        "500":
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /api/config/{configName}:
+    get:
+      tags:
+      - AppConfig
+      summary: Get AppConfig's value
+      operationId: get_6
+      parameters:
+      - name: configName
+        in: path
+        description: Name of the AppConfig
+        required: true
+        schema:
+          type: string
+          enum:
+          - MAIL_VALIDATION_REPORT_WITH_ATTACHMENT_SUBJECT
+          - MAIL_VALIDATION_REPORT_WITH_ATTACHMENT_BODY
+          - MAIL_VALIDATION_REPORT_WITHOUT_ATTACHMENT_SUBJECT
+          - MAIL_VALIDATION_REPORT_WITHOUT_ATTACHMENT_BODY
+          - USER_COUNTRY_CODES_AVAILABLE
+          - USER_GUIDE_TEXT
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppConfig'
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        "405":
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /api/config/names:
+    get:
+      tags:
+      - AppConfig
+      summary: Get available AppConfigs' names
+      operationId: getNames
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+              example:
+              - APP_CONFIG_NAME_A
+              - APP_CONFIG_NAME_B
+              - APP_CONFIG_NAME_C
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        "405":
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+components:
+  schemas:
+    UserSettings:
+      type: object
+      properties:
+        validationReportNotificationEnabled:
+          type: boolean
+          description: User's preference for Validation Report notifications via e-mail
+      description: UserSettings contain any available settings of the authenticated
+        User
+    ApiError:
+      required:
+      - errors
+      type: object
+      properties:
+        errors:
+          type: array
+          description: Includes all errors caused by a request
+          items:
+            $ref: '#/components/schemas/ApiErrorDetail'
+    ApiErrorDetail:
+      required:
+      - code
+      - title
+      type: object
+      properties:
+        code:
+          type: string
+          description: Unique code of the error
+        title:
+          type: string
+          description: Title of error
+        message:
+          type: string
+          description: Message of the error
+        detail:
+          type: string
+          description: Details of the error
+        source:
+          $ref: '#/components/schemas/ErrorSource'
+      description: Includes all errors caused by a request
+    ErrorSource:
+      required:
+      - pointer
+      type: object
+      properties:
+        pointer:
+          type: string
+          description: Points to the location of the request caused this issue.
+      description: Inidate path of the input property caused the error
+    UserGuideFile:
+      type: object
+      properties:
+        filename:
+          type: string
+          description: User-Guide File's filename
+        modifiedAt:
+          type: string
+          description: User-Guide File's last modification datetime in "dd/MM/yyyy
+            HH:mm:ss" format
+      description: User-Guide file's information
+    StructureValidationFile:
+      type: object
+      properties:
+        filename:
+          type: string
+          description: Structure Validation File's filename
+        modifiedAt:
+          type: string
+          description: Structure Validation File's last modification datetime in "dd/MM/yyyy
+            HH:mm:ss" format
+        countryCode:
+          type: string
+          description: Structure Validation File's 2-letter country code
+        dataType:
+          type: string
+          description: PublicationFileDataType for which this StructureValidationFile
+            is being used for validation
+          enum:
+          - ABSTRACT
+          - AUTHORITY_FILE
+          - BIBLIOGRAPHIC
+          - CITATION
+          - COMBINED_DATA_PACKAGE
+          - CPC
+          - FULL_TEXT
+          - IMAGE
+          - LEGAL_STATUS
+          - UNKNOWN
+      description: Structure Validation File's information
+    PublicationFile:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: PublicationFile's unique identifier
+          format: int64
+        originalFilename:
+          type: string
+          description: PublicationFile's originally uploaded filename
+        deliveryId:
+          type: string
+          description: PublicationFile's unique identifier of delivery
+          format: uuid
+        dataType:
+          type: string
+          description: PublicationFile's data type
+          enum:
+          - ABSTRACT
+          - AUTHORITY_FILE
+          - BIBLIOGRAPHIC
+          - CITATION
+          - COMBINED_DATA_PACKAGE
+          - CPC
+          - FULL_TEXT
+          - IMAGE
+          - LEGAL_STATUS
+          - UNKNOWN
+        submissionDate:
+          type: string
+          description: PublicationFile's date of submission
+          format: date
+        status:
+          type: string
+          description: PublicationFile's status
+          enum:
+          - SUBMITTED
+          - APPROVED
+          - WARNING
+          - REJECTED
+        validationReportAvailable:
+          type: boolean
+          description: Availability of PublicationFile's validation report
+        validationError:
+          $ref: '#/components/schemas/ValidationError'
+      description: Uploaded file's entity with any necessary details
+    ValidationError:
+      type: object
+      properties:
+        errorMessages:
+          type: object
+          additionalProperties:
+            uniqueItems: true
+            type: array
+            description: PublicationFile's validation error messages
+            items:
+              type: string
+              description: PublicationFile's validation error messages
+          description: PublicationFile's validation error messages
+      description: PublicationFile's validation error
+    Country:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Country's 2-letter code
+        name:
+          type: string
+          description: Country's name
+      description: Available countries' information
+    AppConfig:
+      type: object
+      properties:
+        name:
+          type: string
+          description: User's preference for Validation Report notifications via e-mail
+          enum:
+          - MAIL_VALIDATION_REPORT_WITH_ATTACHMENT_SUBJECT
+          - MAIL_VALIDATION_REPORT_WITH_ATTACHMENT_BODY
+          - MAIL_VALIDATION_REPORT_WITHOUT_ATTACHMENT_SUBJECT
+          - MAIL_VALIDATION_REPORT_WITHOUT_ATTACHMENT_BODY
+          - USER_COUNTRY_CODES_AVAILABLE
+          - USER_GUIDE_TEXT
+        value:
+          type: string
+          description: AppConfig's value
+      description: AppConfig contains a name and a value of a specific configuration
+    User:
+      type: object
+      properties:
+        username:
+          type: string
+          description: User's username
+        name:
+          type: string
+          description: User's name
+        countryCode:
+          type: string
+          description: User's country code
+        roles:
+          uniqueItems: true
+          type: array
+          description: User's roles
+          items:
+            type: string
+            description: User's roles
+      description: User contains details of the authenticated User
+    Delivery:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Delivery's unique identifier
+          format: uuid
+        name:
+          type: string
+          description: Delivery's name
+        submissionDate:
+          type: string
+          description: Delivery's date of submission
+          format: date
+        countryCode:
+          type: string
+          description: Delivery's 2-letter country code
+        validationReportAvailable:
+          type: boolean
+          description: Delivery's availability of ValidationReport
+        statuses:
+          type: object
+          additionalProperties:
+            type: integer
+            description: Delivery's number of PublicationFiles per status
+            format: int64
+          description: Delivery's number of PublicationFiles per status
+        publicationFiles:
+          uniqueItems: true
+          type: array
+          description: Delivery's Publication Files
+          items:
+            $ref: '#/components/schemas/PublicationFile'
+      description: A Delivery can contain one or more PublicationFiles

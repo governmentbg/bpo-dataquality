@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+
+<div th:remove="tag" th:fragment="epo-transfer-message(fileEpoTransfer)">
+    <td th:with="epoStatusType = ${T(bg.duosoft.patentsexporter.domain.enums.EpoTransferStatusType)}">
+        <div th:remove="tag" th:switch="${fileEpoTransfer.epoStatus}">
+            <div th:remove="tag" th:case="${epoStatusType.SUBMITTED.name()}">
+                <span style="color: green" th:text="'Успешно трансфериран файл към ЕПВ !'"></span>
+            </div>
+            <div th:remove="tag" th:case="${epoStatusType.APPROVED.name()}">
+                <span style="color: green" th:text="'Файлът е одобрен от ЕПВ !'"></span>
+            </div>
+            <div th:remove="tag" th:case="${epoStatusType.REJECTED.name()}">
+                <span style="color: red" th:text="'Файлът е отхвърлен от ЕПВ !'"></span>
+            </div>
+            <div th:remove="tag" th:case="${epoStatusType.WARNING.name()}">
+                <span style="color: red" th:text="'Файлът е приет от ЕПВ, но съдържа валидационни грешки !'"></span>
+            </div>
+            <div th:remove="tag" th:case="${epoStatusType.ERROR.name()}">
+                <span style="color: red"
+                      th:text="'Възникна грешка в изпълнението на услугата предоставена от ЕПВ ! Моля свържете се с администратор или опитайте отново!'"></span>
+            </div>
+            <div th:remove="tag" th:case="*">
+                <div>
+                    <span style="color: green" th:text="'Файловете са изпратени към ЕПВ !'"></span>
+                    <div th:text="|Списък на статусите на изпратените файлове: |"></div>
+                    <span style="white-space: pre;"
+                          th:text="|${fileEpoTransfer.epoStatus}|"></span>
+                </div>
+            </div>
+        </div>
+    </td>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,131 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head th:fragment="head_declaration">
+    <meta content="text/html; charset=UTF-8" http-equiv="content-type">
+
+    <link th:href="|@{${@environment.getProperty('portal.url')}}/@{${@environment.getProperty('theme.name')}}/images/favicon.ico|" rel="Shortcut Icon">
+
+    <link rel="stylesheet" th:href="|@{${@environment.getProperty('portal.url')}}/web/guest/bpo_online?p_p_id=bposervicesportlet_WAR_bposervicesportlet&p_p_lifecycle=2&_bposervicesportlet_WAR_bposervicesportlet_javax.faces.resource=primefaces.css&_bposervicesportlet_WAR_bposervicesportlet_ln=primefaces|" type="text/css" />
+
+    <link rel="stylesheet" th:href="|@{${@environment.getProperty('portal.url')}}/@{${@environment.getProperty('theme.name')}}/css/aui.css|" type="text/css"/>
+    <link rel="stylesheet" th:href="|@{${@environment.getProperty('portal.url')}}/@{${@environment.getProperty('theme.name')}}/css/main.css|" type="text/css"/>
+    <link rel="stylesheet" th:href="@{/webjars/fancybox/3.2.5/jquery.fancybox.min.css}"/>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+    <link rel="stylesheet" th:href="@{/css/jquery-ui.css}"/>
+
+    <style th:if="${#strings.equalsIgnoreCase('local',@environment.getProperty('spring.active.profile')) or #strings.equalsIgnoreCase('bpo-test',@environment.getProperty('spring.active.profile'))}">
+
+        .ribbon[test] {
+            background-color: rgba(170, 0, 0, 0.5);
+            left: -3.5em;
+            moz-transform: rotate(-45deg);
+            ms-transform: rotate(-45deg);
+            o-transform: rotate(-45deg);
+            webkit-transform: rotate(-45deg);
+            transform: rotate(-45deg);
+            overflow: hidden;
+            position: absolute;
+            top: 40px;
+            white-space: nowrap;
+            width: 15em;
+            z-index: 9999;
+            pointer-events: none;
+            opacity: 0.75;
+        }
+        .ribbon[test] a[test] {
+            color: #fff;
+            display: block;
+            font-weight: 400;
+            margin: 1px 0;
+            padding: 10px 50px;
+            text-align: center;
+            text-decoration: none;
+            text-shadow: 0 0 5px #444;
+            pointer-events: none;
+            border-bottom: none !important;
+        }
+    </style>
+
+    <script th:src="@{/webjars/jquery/3.2.1/jquery.min.js}"></script>
+    <script th:src="@{/webjars/jquery-ui/1.12.1/jquery-ui.min.js}"></script>
+    <script th:src="@{/webjars/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
+    <script th:src="@{/webjars/fancybox/3.2.5/jquery.fancybox.min.js}"></script>
+
+    <script th:src="@{/js/datepicker/i18n/datepicker-bg.js}"></script>
+    <script th:src="@{/js/datepicker.js}"></script>
+    <script th:src="@{/js/fancyBox.js}"></script>
+    <script th:src="@{/js/loader.js}"></script>
+    <script th:src="@{/js/main.js}"></script>
+    <script th:src="@{/js/authorityFile.js}"></script>
+    <script th:src="@{/js/formUtils.js}"></script>
+
+</head>
+
+<body th:fragment="header" th:with="isAdmin=${#request.isUserInRole('Admin_Viewer')}" th:remove="tag">
+<div th:if="${#strings.equalsIgnoreCase('local',@environment.getProperty('spring.active.profile')) or #strings.equalsIgnoreCase('bpo-test',@environment.getProperty('spring.active.profile'))}" test="" class="ribbon">
+    <a test="" href="">Тестова среда</a>
+</div>
+<header>
+    <div th:switch="${isAdmin}" th:remove="tag">
+        <div th:case="true" th:remove="tag">
+            <a th:href="@{${@environment.getProperty('portal.management.home.url')}}"
+               th:class="|logo logo-${#locale}|"></a>
+        </div>
+        <div th:case="*" th:remove="tag">
+            <a th:href="@{${@environment.getProperty('portal.home.url')}}" th:class="|logo logo-${#locale}|"></a>
+        </div>
+    </div>
+
+    <div class="login  login-box">
+        <div th:switch="${username}" th:with="name=${username}" th:remove="tag">
+            <div th:case="'anonymousUser'">
+                <div>
+                    <a th:text="#{btn.login}" th:href="@{${@environment.getProperty('portal.login.url')}}"
+                       class="btn btn-default btn-login login-button"></a>
+                </div>
+            </div>
+            <div th:case="*">
+                <div class="btn-group displaced">
+                    <button th:utext="${#strings.trim(name)}+'<span class=caret></span>'" type="button"
+                            class="btn btn-default btn-login dropdown-toggle"
+                            data-toggle="dropdown"></button>
+                    <ul role="menu" class="dropdown-menu">
+                        <li class="lfr-nav-item selected active" aria-selected="true" role="presentation">
+                            <a aria-labelledby="layout_1" class="" href="https://portal.bpo.bg/home" role="menuitem"> <span> Начало </span> </a>
+                        </li>
+                        <li>
+                            <a th:text="#{user.dropdown.profile}" class="underline"
+                               th:href="@{${@environment.getProperty('portal.user.url')}}"></a>
+                        </li>
+                        <li th:switch="${isAdmin}" class="selected-item">
+                            <a th:case="true" th:text="#{user.dropdown.start}" class="underline"
+                               th:href="@{${@environment.getProperty('portal.management.home.url')}}"></a>
+                            <a th:case="*" th:text="#{user.dropdown.start}" class="underline"
+                               th:href="@{${@environment.getProperty('portal.home.url')}}"></a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a th:text="#{user.dropdown.exit}" class="logout underline"
+                               th:href="@{/j_spring_security_logout}"></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <a th:href="@{${@environment.getProperty('feedback.url')}}" th:text="#{header.feedback}" class="feedback"></a>
+
+    <a th:href="@{${@environment.getProperty('instructions.url')}}" th:text="#{header.instructions}"
+       th:title="#{header.instructions}"
+       target="_blank" class="download-pdf"></a>
+    <div th:id="bpo-loader">
+        <div id="bgloader"></div>
+        <div class="search_dialog_text">Зареждане...</div>
+        <div class="search_dialog_text">Моля изчакайте.</div>
+    </div>
+</header>
+
+</body>
+</html>

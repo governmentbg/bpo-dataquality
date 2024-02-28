@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/header :: head_declaration"></head>
+<body>
+<header th:replace="fragments/header :: header"></header>
+<div id="authority-file-page" class="main-bpo-content" style="min-height: 400px">
+    <div class="portlet-content" style="padding-top: 0">
+        <header class="bpo">
+            <h2 th:text="#{authority.file.page.title}"></h2>
+        </header>
+    </div>
+
+    <div class="search_panel ui-grid ui-outputpanel css_checked"
+         style="margin-top: 20px; padding: 15px 5px; background-color: #fff; border: 1px #ddd solid; border-radius: 8px; box-shadow: 0 2px 4px #cef;">
+
+
+        <div class="ui-grid-row" style="margin-left: 10px; margin-bottom: 10px">
+            <div>
+                <input type="checkbox" id="authority-file-all-records" name="allRecords"/>
+                <label for="authority-file-all-records" th:text="#{authority.file.generate.full}"></label>
+            </div>
+        </div>
+        <div id="authority-file-filters-wrapper">
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-1">
+                    <label class="txtRight bld" th:for="${'dateFrom-filter-input'}"
+                           th:text="#{authority.file.filter.dateFrom}"></label>
+                </div>
+                <div class="ui-grid-col-3">
+                    <div class="input-field">
+                        <input data-type="datepicker"
+                               th:id="${'dateFrom-filter-input'}"
+                               th:type="text"
+                               th:class="date"
+                        >
+                    </div>
+                </div>
+                <div class="ui-grid-col-1"></div>
+                <div class="ui-grid-col-1">
+                    <label class="txtRight bld" th:for="${'dateTo-filter-input'}"
+                           th:text="#{authority.file.filter.dateTo}"></label>
+                </div>
+                <div class="ui-grid-col-3">
+                    <div class="input-field">
+                        <input data-type="datepicker"
+                               th:id="${'dateTo-filter-input'}"
+                               th:type="text"
+                               th:class="date"
+                        >
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="search_panel ui-grid">
+        <div th:id="validation-errors-wrapper"></div>
+
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-8"></div>
+            <div class="ui-grid-col-4">
+                <button th:id="generate-authority-file-btn" th:text="#{btn.generate}" type="button"
+                        style="letter-spacing: 1px; text-transform: uppercase;font-size: 14px; font-weight: normal; line-height: 20px;"></button>
+            </div>
+        </div>
+        <div class="ui-grid-row" th:id="authority-file-action-btns" style="display: none">
+            <div class="ui-grid-col-5"></div>
+            <div class="ui-grid-col-3">
+                <button th:id="download-authority-file-btn" th:text="#{btn.download}" type="button"
+                        style="letter-spacing: 1px; text-transform: uppercase;font-size: 14px; font-weight: normal; line-height: 20px;"></button>
+            </div>
+            <div class="ui-grid-col-4">
+                <button th:id="send-authority-file-btn" th:text="#{btn.epo.send}" type="button"
+                        style="letter-spacing: 1px; text-transform: uppercase;font-size: 14px; font-weight: normal; line-height: 20px;"></button>
+            </div>
+        </div>
+    </div>
+
+    <div th:id="epo-transfer-message-wrapper">
+        <div th:if="${fileEpoTransfer != null}">
+            <div th:replace="fragments/epo_transfer_message :: epo-transfer-message(${fileEpoTransfer})"></div>
+        </div>
+    </div>
+
+    <div th:replace="fragments/authority_file/authority_file_fragments :: generated-file-fields"></div>
+</div>
+<footer th:replace="fragments/footer :: footer"></footer>
+</body>
+</html>

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/header :: head_declaration"></head>
+<body>
+<header th:replace="fragments/header :: header"></header>
+<div class="main-bpo-content" style="min-height: 400px">
+    <div class="portlet-content" style="padding-top: 0">
+        <header class="bpo">
+            <h2 th:text="#{patents.title}"></h2>
+        </header>
+    </div>
+
+    <div class="search_panel ui-grid ui-outputpanel css_checked"
+         style="margin-top: 20px; padding: 15px 5px; background-color: #fff; border: 1px #ddd solid; border-radius: 8px; box-shadow: 0 2px 4px #cef;">
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-1">
+                <label class="txtRight bld" th:text="#{filter.year}" th:for="filter-year"></label>
+            </div>
+            <div class="ui-grid-col-4">
+                <select th:id="filter-year" class="ui-inputfield w220px h35px search-filter">
+                    <option th:each="year : ${yearList}"
+                            th:text="${year}"
+                            th:value="${year}">
+                    </option>
+                </select>
+            </div>
+            <div class="ui-grid-col-1"></div>
+            <div class="ui-grid-col-1">
+                <label class="txtRight bld" th:text="#{filter.number}" th:for="filter-number"></label>
+            </div>
+            <div id="number-field-wrapper" class="ui-grid-col-4">
+                <div th:replace="fragments/number-field::number-field(numberList=${numberList})"></div>
+            </div>
+        </div>
+    </div>
+    <div class="search_panel ui-grid">
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-10">
+                <div th:id="generate-msg-success" class="temp-message"
+                     style="text-align: left; display: none; color: green"
+                     th:text="#{generation.success}"></div>
+                <div th:id="generate-msg-errors" class="temp-message"
+                     style="text-align: left; display: none; color: red"
+                     th:text="#{generation.errors}"></div>
+                <div th:id="generate-msg-fail" class="temp-message" style="text-align: left; display: none; color: red"
+                     th:text="#{generation.fail}"></div>
+                <div th:id="download-link-wrapper" style="display: none; text-align: left">
+                    <a th:id="download-url" class="ui-commandlink ui-widget">
+                        <span th:text="#{download.file}"></span>
+                    </a>
+                </div>
+            </div>
+            <div class="ui-grid-col-2">
+                <button th:id="generate-btn" th:text="#{btn.generate}" type="button"
+                        style="letter-spacing: 1px; text-transform: uppercase;font-size: 14px; font-weight: normal; line-height: 20px;"></button>
+            </div>
+        </div>
+        <div class="ui-grid-row" th:id="send-patents-wrapper" style="display: none;">
+            <div class="ui-grid-col-9"></div>
+            <div class="ui-grid-col-3">
+                <button th:id="send-patents-btn" th:text="#{btn.epo.send}" type="button"
+                        style="letter-spacing: 1px; text-transform: uppercase;font-size: 14px; font-weight: normal; line-height: 20px;"></button>
+                <input th:type="hidden" th:id="patents-file-path" th:value="${patentsFilePath}">
+            </div>
+        </div>
+        <div th:id="epo-transfer-message-wrapper">
+            <div th:if="${fileEpoTransfer != null}">
+                <div th:replace="fragments/epo_transfer_message :: epo-transfer-message(${fileEpoTransfer})"></div>
+            </div>
+        </div>
+        <div th:id="validation-errors-wrapper"></div>
+    </div>
+</div>
+<footer th:replace="fragments/footer :: footer"></footer>
+</body>
+</html>

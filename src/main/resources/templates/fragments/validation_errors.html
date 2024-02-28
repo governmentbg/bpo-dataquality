@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+
+<div th:fragment="errors(validationErrors)">
+    <div th:id="validation-errors">
+        <div>
+            <div>
+                <h6 th:text="'Списък с грешки'"></h6>
+            </div>
+            <div>
+
+                <div th:each="error : ${validationErrors}">
+                    <div style="color: #d21010" th:text="#{${error.messageCode}}"></div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
